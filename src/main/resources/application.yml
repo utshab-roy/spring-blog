@@ -5,9 +5,9 @@ server:
 
 spring:
   datasource:
-    password:
+    password: root
     url: jdbc:postgresql://localhost:5432/blog
-    username:
+    username: root
   jpa:
     hibernate:
       ddl-auto: create-drop
