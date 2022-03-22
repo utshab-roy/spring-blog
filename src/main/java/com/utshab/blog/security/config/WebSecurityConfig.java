@@ -11,6 +11,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import static com.utshab.blog.appuser.AppUserRole.STUDENT;
+
 @Configuration
 @AllArgsConstructor
 @EnableWebSecurity
@@ -26,11 +28,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/v*/registration/**")
-                .permitAll()
+                .antMatchers("/api/v*/registration/**").permitAll()
+                .antMatchers("api/v1/students/**").hasRole(STUDENT.name())
                 .anyRequest()
                 .authenticated().and()
-                .formLogin()
+                .httpBasic()
         ;
     }
 
