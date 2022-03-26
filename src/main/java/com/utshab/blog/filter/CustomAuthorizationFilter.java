@@ -32,7 +32,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // if the user access the login page then do nothing
-        if (request.getServletPath().equals("/api/login")) {
+        if (request.getServletPath().equals("/api/login") || request.getServletPath().equals("/api/token/refresh")) {
             filterChain.doFilter(request, response); // we are doing nothing if the api is api/login, let the request go through
         } else {
             // for each request we will be checking if the request has valid authorization
