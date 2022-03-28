@@ -37,11 +37,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
         customAuthenticationFilter.setFilterProcessesUrl("/api/login");
 
+        http.cors();
         http.csrf().disable();
+        http.headers().frameOptions().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         // order of antMatchers are really important, we should declare permitAll url in the beginning
-        http.authorizeRequests().antMatchers("/api/login/**", "/api/token/refresh").permitAll();
+        http.authorizeRequests().antMatchers("/api/login", "/api/token/refresh", "/api/demo").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/user/**").hasAnyAuthority("ROLE_USER");
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/user/save/**").hasAnyAuthority("ROLE_ADMIN");
         http.authorizeRequests().anyRequest().authenticated();
@@ -49,6 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilter(customAuthenticationFilter);
         // the CustomAuthorizationFilter() is written for UsernamePasswordAuthenticationFilter.class
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+
     }
 
     // AuthenticationManager is in the WebSecurityConfigurerAdapter class that we are extending

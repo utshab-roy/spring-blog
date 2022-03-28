@@ -33,6 +33,12 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class UserController {
     private final AppUserService userService;
 
+
+    @GetMapping("/demo")
+    public ResponseEntity<List<AppUser>> getDemo() {
+        return ResponseEntity.ok().body(userService.getUsers());
+    }
+
     @GetMapping("/users")
     public ResponseEntity<List<AppUser>> getUsers() {
         return ResponseEntity.ok().body(userService.getUsers());
