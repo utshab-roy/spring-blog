@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -42,6 +43,16 @@ public class UserController {
     @GetMapping("/users")
     public ResponseEntity<List<AppUser>> getUsers() {
         return ResponseEntity.ok().body(userService.getUsers());
+    }
+
+    @GetMapping("users/{id}")
+    public ResponseEntity<AppUser> getUserById(@PathVariable long id) {
+        Optional<AppUser> user = userService.getUserById(id);
+        if (user.isPresent()) {
+            return ResponseEntity.ok().body(user.get());
+        } else {
+            throw new UsernameNotFoundException("User not found !!");
+        }
     }
 
     @PostMapping("/user/save")
@@ -77,7 +88,7 @@ public class UserController {
 
                 String access_token = JWT.create()
                         .withSubject(user.getUsername())
-                        .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
+                        .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 * 1000))
                         .withIssuer(request.getRequestURL().toString())
                         .withClaim("roles", user.getRoles().stream().map(Role::getName).collect(Collectors.toList()))
                         .sign(algorithm);

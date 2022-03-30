@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -83,5 +84,10 @@ public class UserServiceImpl implements AppUserService, UserDetailsService {
     public List<AppUser> getUsers() {
         log.info("Fetching all users");
         return userRepository.findAll();
+    }
+
+    @Override
+    public Optional<AppUser> getUserById(long id) {
+        return userRepository.findById(id);
     }
 }
